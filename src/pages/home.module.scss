@@ -1,1 +1,46 @@
-// TODO
+.container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.posts {
+  margin: 3rem auto;
+
+  a {
+    display: block;
+
+    strong {
+      display: block;
+      font-size: 1.5rem;
+      margin-top: 1rem;
+      line-height: 2rem;
+      transition: color 0.2s;
+    }
+    &:hover strong{
+      color: var(--pink-500)
+    }
+
+    p {
+      font-size: 1.2rem;
+      font-weight: 400;
+      line-height: 2.4rem;
+      color: var(--gray-200);
+    }
+  }
+
+  .info {
+    margin-top: 0.6rem;
+    display: flex;
+    align-items: center;
+    color: var(--gray-300);
+
+    svg {
+      margin-right: .4rem;
+    }
+
+    time, span {
+      margin-right: 1.2rem;
+    }
+  }
+}

@@ -1,6 +1,9 @@
 import { GetStaticProps } from 'next';
+import React from 'react';
 import Head from 'next/head';
+import Link from 'next/link';
 
+import { FiCalendar, FiUser } from 'react-icons/fi';
 import { getPrismicClient } from '../services/prismic';
 
 import commonStyles from '../styles/common.module.scss';
@@ -29,8 +32,46 @@ export default function Home({ postsPagination }: HomeProps) {
   return (
     <>
       <Head>
-        <title>Home | ig.news</title>
+        <title>Home | spacetraveling.</title>
       </Head>
+
+      <main className={styles.container}>
+        <div className={styles.posts}>
+
+          <Link href="/">
+            <a href="/">
+              <strong>Como utilizar Hooks</strong>
+              <p>Pensando em sincronização em vez de ciclos de vida.</p>
+            </a>
+          </Link>
+
+          <div className={styles.info}>
+            <FiCalendar />
+            <time>15 Mar 2021</time>
+
+            <FiUser />
+            <span>Joseph Climber</span>
+          </div>
+        </div>
+
+        <div className={styles.posts}>
+
+          <Link href="/">
+            <a href="/">
+              <strong>Como utilizar Hooks</strong>
+              <p>Pensando em sincronização em vez de ciclos de vida.</p>
+            </a>
+          </Link>
+
+          <div className={styles.info}>
+            <FiCalendar />
+            <time>15 Mar 2021</time>
+
+            <FiUser />
+            <span>Joseph Climber</span>
+          </div>
+        </div>
+      </main>
     </>
   );
 }
