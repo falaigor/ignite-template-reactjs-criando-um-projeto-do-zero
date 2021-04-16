@@ -58,8 +58,8 @@ export default function Home({ postsPagination }: HomeProps) {
 
           <Link href="/">
             <a href="/">
-              <strong>Como utilizar Hooks</strong>
-              <p>Pensando em sincronização em vez de ciclos de vida.</p>
+              <strong>Criando um app CRA do zero</strong>
+              <p>Tudo sobre como criar a sua primeira aplicação utilizando Create React App.</p>
             </a>
           </Link>
 
