@@ -1,12 +1,11 @@
 .headerContainer {
-  height: 6rem;
-}
+  height: 7rem;
+  max-width: 1120px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 5rem 0;
 
-.headerContent {
-  max-width: 720px;
-  height: 5rem;
-  margin: 1.2rem auto;
-  padding: 2rem;
-  display: flex;
-  align-items: center;
+  a {
+    cursor: pointer;
+  }
 }

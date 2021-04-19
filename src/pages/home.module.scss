@@ -1,46 +1,73 @@
-.container {
-  max-width: 720px;
+.postsContainer {
+  max-width: 1120px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 2rem 0;
 }
 
-.posts {
-  margin: 3rem auto;
-
+.postList {
   a {
     display: block;
+    max-width: 700px;
+
+    & + a {
+      margin-top: 3rem;
+    }
 
     strong {
-      display: block;
-      font-size: 1.5rem;
-      margin-top: 1rem;
-      line-height: 2rem;
+      font-size: 1.8rem;
+      font-weight: 700;
+      line-height: 2.2rem;
+      color: var(--gray-50);
       transition: color 0.2s;
-    }
-    &:hover strong{
-      color: var(--pink-500)
     }
 
     p {
+      padding: 1rem 0;
       font-size: 1.2rem;
       font-weight: 400;
-      line-height: 2.4rem;
-      color: var(--gray-200);
+      line-height: 1.4rem;
+      color: var(--gray-100);
+    }
+
+    &:hover strong{
+      color: var(--pink-400);
     }
   }
+}
 
-  .info {
-    margin-top: 0.6rem;
+.postInfo {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0.2rem 0;
+  color: var(--gray-300);
+
+  time {
     display: flex;
     align-items: center;
-    color: var(--gray-300);
+    margin-right: 0.5rem;
 
     svg {
-      margin-right: .4rem;
-    }
-
-    time, span {
-      margin-right: 1.2rem;
+      margin-right: 0.5rem;
     }
   }
+
+  span {
+    display: flex;
+    align-items: center;
+    margin-left: 0.5rem;
+
+    svg {
+      margin-right: 0.5rem;
+    }
+  }
+}
+
+.morePostsButton {
+  margin-top: 2rem;
+  font-size: 1.3rem;
+  color: var(--pink-400);
+  font-weight: 600;
+  background: transparent;
+  border: 0;
 }

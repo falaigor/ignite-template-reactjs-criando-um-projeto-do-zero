@@ -1,10 +1,13 @@
 import { GetStaticProps } from 'next';
-import React from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-
+import Prismic from '@prismicio/client';
+import { format } from 'date-fns';
+import ptBR from 'date-fns/locale/pt-BR';
 import { FiCalendar, FiUser } from 'react-icons/fi';
+import { useState } from 'react';
 import { getPrismicClient } from '../services/prismic';
+import Header from '../components/Header';
 
 import commonStyles from '../styles/common.module.scss';
 import styles from './home.module.scss';
@@ -28,57 +31,100 @@ interface HomeProps {
   postsPagination: PostPagination;
 }
 
-export default function Home({ postsPagination }: HomeProps) {
+export default function Home({ postsPagination }: HomeProps): JSX.Element {
+  const [posts, setPosts] = useState(postsPagination.results);
+  const [nextPageLink, setNextPageLink] = useState(postsPagination.next_page);
+
+  function handleMorePost(): void {
+    fetch(postsPagination.next_page)
+      .then(res => res.json())
+      .then(jsonData => {
+        console.log(jsonData.results);
+        const newPosts = jsonData.results.map(post => {
+          return {
+            uid: post.uid,
+            first_publication_date: post.first_publication_date,
+            data: post.data,
+          };
+        });
+
+        setPosts(oldPosts => [...oldPosts, ...newPosts]);
+        setNextPageLink(jsonData.next_page);
+      });
+  }
   return (
     <>
       <Head>
-        <title>Home | spacetraveling.</title>
+        <title>spacetraveling</title>
       </Head>
+      <Header />
+      <main className={styles.postsContainer}>
+        <div className={styles.postList}>
+          {posts.map(post => (
+            <Link key={post.uid} href={`/post/${post.uid}`}>
+              <a>
+                <strong>{post.data.title}</strong>
+                <p>{post.data.subtitle}</p>
 
-      <main className={styles.container}>
-        <div className={styles.posts}>
-
-          <Link href="/">
-            <a href="/">
-              <strong>Como utilizar Hooks</strong>
-              <p>Pensando em sincronização em vez de ciclos de vida.</p>
-            </a>
-          </Link>
-
-          <div className={styles.info}>
-            <FiCalendar />
-            <time>15 Mar 2021</time>
-
-            <FiUser />
-            <span>Joseph Climber</span>
-          </div>
+                <div className={styles.postInfo}>
+                  <time>
+                    <FiCalendar />
+                    {format(
+                      new Date(post.first_publication_date),
+                      'dd MMM yyyy',
+                      {
+                        locale: ptBR,
+                      }
+                    )}
+                  </time>
+                  <span>
+                    <FiUser />
+                    {post.data.author}
+                  </span>
+                </div>
+              </a>
+            </Link>
+          ))}
         </div>
 
-        <div className={styles.posts}>
-
-          <Link href="/">
-            <a href="/">
-              <strong>Criando um app CRA do zero</strong>
-              <p>Tudo sobre como criar a sua primeira aplicação utilizando Create React App.</p>
-            </a>
-          </Link>
-
-          <div className={styles.info}>
-            <FiCalendar />
-            <time>15 Mar 2021</time>
-
-            <FiUser />
-            <span>Joseph Climber</span>
-          </div>
-        </div>
+        {nextPageLink && (
+          <button
+            className={styles.morePostsButton}
+            type="button"
+            onClick={handleMorePost}
+          >
+            Carregar mais posts
+          </button>
+        )}
       </main>
     </>
   );
 }
 
-// export const getStaticProps = async () => {
-//   // const prismic = getPrismicClient();
-//   // const postsResponse = await prismic.query(TODO);
+export const getStaticProps: GetStaticProps = async () => {
+  const prismic = getPrismicClient();
+  const postsResponse = await prismic.query(
+    [Prismic.predicates.at('document.type', 'posts')],
+    {
+      fetch: ['posts.title', 'posts.author', 'posts.subtitle'],
+    }
+  );
 
-//   // TODO
-// };
+  const posts = postsResponse.results.map(post => {
+    return {
+      uid: post.uid,
+      first_publication_date: post.first_publication_date,
+      data: post.data,
+    };
+  });
+
+  return {
+    props: {
+      postsPagination: {
+        results: posts,
+        next_page: postsResponse.next_page,
+      },
+    },
+    revalidate: 60 * 30, // 30 minutos
+  };
+};
